@@ -51,6 +51,9 @@ const EditBillTitle = (): JSX.Element => {
       await handleUpdateBillTitle({
         bill_id: bill.id,
         title,
+        dueDate: bill.dueDate,
+        value: bill.value,
+        notificationId: bill.notificationId,
       });
       navigate('EditBill', {
         bill_id: bill.id,

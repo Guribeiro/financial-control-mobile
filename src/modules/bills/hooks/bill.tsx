@@ -43,7 +43,6 @@ import {
   deleteField,
   orderBy,
   OrderByDirection,
-  deleteDoc,
 } from 'firebase/firestore';
 
 import {
@@ -78,7 +77,6 @@ interface BillContextData {
   handleUpdateBillDueDate(props: UpdateBillDueDateProps): Promise<void>;
   handleUpdateBillStatus(props: UpdateBillStatusProps): Promise<void>;
   handleUpdateBillReceipt(props: HandleUpdateBillReceiptProps): Promise<void>;
-  handleDeleteBill(props: HandleDeleteBillProps): Promise<void>;
 }
 
 interface BillProviderProps {
@@ -98,6 +96,9 @@ interface HandleCreateBillProps {
 
 interface UpdateBillTitleProps extends UpdateBill {
   title: string;
+  dueDate: Date;
+  value: number;
+  notificationId: string;
 }
 
 interface UpdateBillValueProps extends UpdateBill {
@@ -122,10 +123,6 @@ interface UpdateBillStatusProps extends UpdateBill {
 interface HandleUpdateBillReceiptProps extends UpdateBill {
   newReceipt: ImageInfo;
   currentReceipt: Receipt;
-}
-
-interface HandleDeleteBillProps {
-  bill: Bill;
 }
 
 interface FirestoreBill {
@@ -488,9 +485,18 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
   );
 
   const handleUpdateBillTitle = useCallback(
-    async ({ bill_id, title }: UpdateBillTitleProps) => {
+    async ({
+      bill_id,
+      title,
+      dueDate,
+      value,
+      notificationId,
+    }: UpdateBillTitleProps) => {
       try {
         setLoading(true);
+
+        const startOfDueDate = startOfDay(dueDate);
+
         const docUserBillRef = doc(
           database,
           'users',
@@ -499,8 +505,26 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
           bill_id,
         );
 
+        await Notifications.cancelScheduledNotificationAsync(notificationId);
+
+        const newNotificationId = await scheduleNotification({
+          content: {
+            title: `Heeey, ${docUser.name}`,
+            body: `Não se esqueça, a sua ${title} vence hoje`,
+            sound: true,
+            data: {
+              title,
+              value,
+            },
+          },
+          trigger: {
+            date: startOfDueDate,
+          },
+        });
+
         await updateDoc(docUserBillRef, {
           title,
+          notificationId: newNotificationId,
           updatedAt: Timestamp.fromDate(new Date()),
         });
         alert({
@@ -766,44 +790,6 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
     [alert, user.uid],
   );
 
-  const handleDeleteBill = useCallback(
-    async ({ bill }: HandleDeleteBillProps) => {
-      try {
-        setLoading(true);
-        const userBillReceiptImageRef = ref(
-          storage,
-          `${user.uid}/receipts/${bill.billReceipt.filePath}`,
-        );
-
-        await deleteObject(userBillReceiptImageRef);
-
-        await Notifications.cancelScheduledNotificationAsync(
-          bill.notificationId,
-        );
-
-        const docUserBillRef = doc(
-          database,
-          'users',
-          user.uid,
-          'bills',
-          bill.id,
-        );
-
-        await deleteDoc(docUserBillRef);
-      } catch (error) {
-        const message = verifyCodeError(error);
-
-        alert({
-          message,
-          type: 'error',
-        });
-      } finally {
-        setLoading(false);
-      }
-    },
-    [user.uid, alert],
-  );
-
   return (
     <BillContext.Provider
       value={{
@@ -826,10 +812,10 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
         handleUpdateBillDueDate,
         handleUpdateBillStatus,
         handleUpdateBillReceipt,
-        handleDeleteBill,
       }}
     >
       {children}
+
       <Animated.View
         style={[
           createBillModalStyle,

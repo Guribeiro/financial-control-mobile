@@ -37,7 +37,7 @@ const NavigateButton = ({
         <Ionicons
           name={icon}
           color={customTheme.palett.colors.text_primary_100}
-          size={24}
+          size={customTheme.screen.rem(1.5, true)}
         />
         <Spacer size={16} horizontal />
         <NavigateButtonText weight="light">{label}</NavigateButtonText>
@@ -45,7 +45,7 @@ const NavigateButton = ({
       <Feather
         name="chevron-right"
         color={customTheme.palett.colors.text_primary_100}
-        size={24}
+        size={customTheme.screen.rem(1.5, true)}
       />
     </Container>
   );

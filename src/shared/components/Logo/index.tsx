@@ -23,7 +23,7 @@ const Logo = (): JSX.Element => {
     <Container>
       <Feather
         name="dollar-sign"
-        size={24}
+        size={customTheme.screen.rem(1.5, true)}
         color={customTheme.palett.colors.blue}
       />
       <Text>

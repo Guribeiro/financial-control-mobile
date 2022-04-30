@@ -35,7 +35,7 @@ const OpenDatePickerButton = ({
         <ButtonText>{dateFormatted}</ButtonText>
         <Feather
           name="chevron-down"
-          size={20}
+          size={customTheme.screen.rem(1.25, true)}
           color={customTheme.palett.colors.text_primary_100}
         />
       </Button>

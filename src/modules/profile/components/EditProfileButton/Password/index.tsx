@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { Feather } from '@expo/vector-icons';
 import { TouchableOpacityProps } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { useTheme } from '@shared/hooks/theme';
 import {
   Container,
   InputLabel,
@@ -17,6 +18,8 @@ interface EditProfileTextProps extends TouchableOpacityProps {
 const Password = ({ label, children }: EditProfileTextProps): JSX.Element => {
   const [isVisibile, setIsVisible] = useState(false);
 
+  const { customTheme } = useTheme();
+
   const handleVisibility = useCallback(() => {
     setIsVisible(prev => !prev);
   }, []);
@@ -28,9 +31,17 @@ const Password = ({ label, children }: EditProfileTextProps): JSX.Element => {
         <InputText>{isVisibile ? children : '***********'}</InputText>
         <TogglePasswordVisibilityButton onPress={handleVisibility}>
           {isVisibile ? (
-            <Feather name="eye-off" size={22} color="#FFFFFF" />
+            <Feather
+              name="eye-off"
+              size={customTheme.screen.rem(1.375, true)}
+              color={customTheme.palett.colors.text_primary_100}
+            />
           ) : (
-            <Feather name="eye" size={22} color="#FFFFFF" />
+            <Feather
+              name="eye"
+              size={customTheme.screen.rem(1.375, true)}
+              color={customTheme.palett.colors.text_primary_100}
+            />
           )}
         </TogglePasswordVisibilityButton>
       </TextInputRow>

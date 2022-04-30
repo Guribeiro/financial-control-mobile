@@ -40,4 +40,5 @@ interface StatusTextProps {
 
 export const StatusText = styled.Text<StatusTextProps>`
   color: ${({ color }) => color};
+  font-size: ${({ theme }) => theme.screen.rem(1, true)}px;
 `;

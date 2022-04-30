@@ -44,7 +44,7 @@ const PickDocumentButton = ({
   return (
     <Container disabled={disabled} {...rest}>
       <Feather
-        size={24}
+        size={customTheme.screen.rem(1.5, true)}
         color={customTheme.palett.colors.text_primary_100}
         name={icon}
       />

@@ -130,7 +130,7 @@ const ThemeSwitcher = (): JSX.Element => {
               ? customTheme.palett.colors.orange
               : customTheme.palett.colors.blue
           }
-          size={16}
+          size={customTheme.screen.rem(1, true)}
         />
       </LabelContainer>
       <Spacer size={16} />

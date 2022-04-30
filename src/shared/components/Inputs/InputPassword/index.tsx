@@ -44,13 +44,13 @@ const PasswordInput = ({
           {passwordIsHide ? (
             <Feather
               name="eye"
-              size={22}
+              size={customTheme.screen.rem(1.375, true)}
               color={customTheme.palett.colors.text_primary_100}
             />
           ) : (
             <Feather
               name="eye-off"
-              size={22}
+              size={customTheme.screen.rem(1.375, true)}
               color={customTheme.palett.colors.text_primary_100}
             />
           )}

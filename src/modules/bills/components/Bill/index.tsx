@@ -71,7 +71,7 @@ const Bill = ({
         <Feather
           name={statusVariation[status].icon}
           color={statusVariation[status].color}
-          size={20}
+          size={customTheme.screen.rem(1.25, true)}
         />
         <Spacer size={6} />
         <StatusText color={statusVariation[status].color}>

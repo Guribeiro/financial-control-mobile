@@ -25,7 +25,7 @@ const Header = (): JSX.Element => {
       <Row>
         <RoundedButton
           name="user"
-          size={22}
+          size={customTheme.screen.rem(1.375, true)}
           color={customTheme.palett.colors.blue}
           onPress={() => navigate('ProfileRoutes')}
         />
@@ -33,7 +33,7 @@ const Header = (): JSX.Element => {
         <TouchableOpacity onPress={() => dispatch(DrawerActions.openDrawer())}>
           <Feather
             name="settings"
-            size={24}
+            size={customTheme.screen.rem(1.5, true)}
             color={customTheme.palett.colors.secondary_100}
           />
         </TouchableOpacity>

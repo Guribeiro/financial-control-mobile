@@ -23,7 +23,7 @@ const Header = ({ navigation }: HeaderProps): JSX.Element => {
       <CloseDrawerButton onPress={() => closeDrawer()}>
         <Feather
           name="x"
-          size={24}
+          size={customTheme.screen.rem(1.5, true)}
           color={customTheme.palett.colors.text_primary_100}
         />
       </CloseDrawerButton>
