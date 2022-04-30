@@ -3,6 +3,10 @@ import { TextInput } from 'react-native';
 
 export const Container = styled.View``;
 
+interface TextInputRowProps {
+  error: boolean;
+}
+
 export const InputText = styled(TextInput)`
   color: ${({ theme }) => theme.palett.colors.text_primary_60};
   height: ${({ theme }) => theme.screen.rem(3.375)}px;
@@ -19,10 +23,12 @@ export const InputLabel = styled.Text`
   line-height: ${({ theme }) => theme.screen.rem(1.5)}px;
 `;
 
-export const TextInputRow = styled.View`
+export const TextInputRow = styled.View<TextInputRowProps>`
   flex-direction: row;
   align-items: center;
   border-radius: 10px;
-  border: 1px solid ${({ theme }) => theme.palett.colors.secondary_100};
+  border: 1px solid
+    ${({ theme, error }) =>
+      error ? theme.palett.colors.red : theme.palett.colors.secondary_100};
   background: ${({ theme }) => theme.palett.colors.secondary_100};
 `;

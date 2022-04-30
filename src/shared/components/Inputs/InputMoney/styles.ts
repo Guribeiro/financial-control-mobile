@@ -3,11 +3,17 @@ import { MaskedTextInput } from 'react-native-mask-text';
 
 export const Container = styled.View``;
 
-export const TextInputRow = styled.View`
+interface TextInputRowProps {
+  error: boolean;
+}
+
+export const TextInputRow = styled.View<TextInputRowProps>`
   flex-direction: row;
   align-items: center;
   border-radius: 10px;
-  border: 1px solid ${({ theme }) => theme.palett.colors.secondary_100};
+  border: 1px solid
+    ${({ theme, error }) =>
+      error ? theme.palett.colors.red : theme.palett.colors.secondary_100};
   background: ${({ theme }) => theme.palett.colors.secondary_100};
   height: ${({ theme }) => theme.screen.rem(3.6)}px;
 `;

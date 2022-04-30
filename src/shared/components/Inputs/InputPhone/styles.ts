@@ -1,6 +1,10 @@
 import styled from 'styled-components/native';
 import { TextInputMask } from 'react-native-masked-text';
 
+interface TextInputRowProps {
+  error: boolean;
+}
+
 export const Container = styled.View``;
 
 export const InputText = styled(TextInputMask)`
@@ -19,10 +23,12 @@ export const InputLabel = styled.Text`
   font-size: ${({ theme }) => theme.screen.rem(0.5, true)}px;
 `;
 
-export const TextInputRow = styled.View`
+export const TextInputRow = styled.View<TextInputRowProps>`
   flex-direction: row;
   align-items: center;
-  border: 1px solid ${({ theme }) => theme.palett.colors.secondary_100};
+  border: 1px solid
+    ${({ theme, error }) =>
+      error ? theme.palett.colors.red : theme.palett.colors.secondary_100};
 
   border-radius: ${({ theme }) => theme.screen.rem(0.625)}px;
   background: ${({ theme }) => theme.palett.colors.secondary_100};

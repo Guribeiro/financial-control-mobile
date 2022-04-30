@@ -32,7 +32,7 @@ const PasswordInput = ({
   return (
     <Container>
       <InputLabel>{label}</InputLabel>
-      <TextInputRow>
+      <TextInputRow error={!!error}>
         <InputText
           keyboardAppearance="dark"
           autoCorrect={false}

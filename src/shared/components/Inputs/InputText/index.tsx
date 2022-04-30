@@ -14,7 +14,7 @@ const Input = ({ label, error, ...rest }: InputProps): JSX.Element => {
     <Container>
       {error && <TextError>{error.message}</TextError>}
       <InputLabel>{label}</InputLabel>
-      <TextInputRow>
+      <TextInputRow error={!!error}>
         <InputText
           keyboardAppearance="dark"
           autoCapitalize="none"

@@ -22,7 +22,7 @@ const InputPhone = ({
       {required && '*'}
     </InputLabel>
     {error && <TextError>{error.message}</TextError>}
-    <TextInputRow>
+    <TextInputRow error={!!error}>
       <InputText
         options={{
           maskType: 'BRL',
