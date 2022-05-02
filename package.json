@@ -39,6 +39,7 @@
     "react-hook-form": "^7.29.0",
     "react-native": "0.64.3",
     "react-native-awesome-alerts": "^1.5.2",
+    "react-native-calendars": "^1.1283.0",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-mask-text": "^0.7.0",
     "react-native-masked-text": "^1.13.0",

@@ -1,5 +1,4 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useBill } from '@modules/bills/hooks/bill';
+import { useCalendar } from '@modules/bills/hooks/calendar';
 
 import Text from '@shared/components/Text';
 
@@ -23,25 +22,12 @@ export const DateText = styled(Label)`
 `;
 
 const DatePicker = (): JSX.Element => {
-  const {
-    selectedDate,
-    selectedDateFormatted,
-    showDateTimePicker,
-    handleDateChanged,
-    handleDateTimePickerVisibility,
-  } = useBill();
+  const { handleShowCalendar, markedDateFormatted } = useCalendar();
 
   return (
-    <Container onPress={handleDateTimePickerVisibility}>
+    <Container onPress={handleShowCalendar}>
       <Label>Selecione o mês e o ano</Label>
-      <DateText>{selectedDateFormatted}</DateText>
-      {showDateTimePicker && (
-        <DateTimePicker
-          mode="date"
-          value={selectedDate}
-          onChange={handleDateChanged}
-        />
-      )}
+      <DateText>{markedDateFormatted}</DateText>
     </Container>
   );
 };

@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-import { Platform } from 'react-native';
 import { v4 } from 'uuid';
 import {
   createContext,
@@ -7,7 +6,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 import Animated, {
@@ -53,20 +51,16 @@ import {
 } from 'firebase/storage';
 
 import { useDocument } from '@shared/hooks/document';
-
 import { verifyCodeError } from '@shared/utils/errors/firebase';
+import { useCalendar } from './calendar';
+
 import CreateBillModal from '../screens/createBill';
 
 interface BillContextData {
   bills: Bills;
   loading: boolean;
   filterStatus: StatusState;
-  selectedDate: Date;
-  selectedDateFormatted: string;
-  showDateTimePicker: boolean;
   oderByDirection: OrderByDirection;
-  handleDateChanged(_: unknown, date: Date | undefined): void;
-  handleDateTimePickerVisibility(): void;
   showCreateBillModal(): void;
   hideCreateBillModal(): void;
   handleSetStatus(props: HandleSetStatusProps): void;
@@ -178,12 +172,12 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const [bills, setBills] = useState<Bills>([]);
   const [filterStatus, setFilterStatus] = useState<StatusState>();
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showDateTimePicker, setShowDateTimePicker] = useState(false);
   const [oderByDirection, setOrderByDirection] =
     useState<OrderByDirection>('asc');
 
   const { alert } = useAlert();
+
+  const { markedDateAsDate } = useCalendar();
 
   const { user, docUser } = useAuthentication();
 
@@ -212,8 +206,8 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
 
         let onSnapshotQuery: Query<DocumentData>;
 
-        const startOfMonthDate = startOfMonth(selectedDate);
-        const endOfMonthDate = endOfMonth(selectedDate);
+        const startOfMonthDate = startOfMonth(markedDateAsDate);
+        const endOfMonthDate = endOfMonth(markedDateAsDate);
 
         const todayDate = new Date();
 
@@ -337,27 +331,7 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
       }
     };
     loadBills();
-  }, [user.uid, filterStatus, alert, selectedDate, oderByDirection]);
-
-  const selectedDateFormatted = useMemo(() => {
-    return format(selectedDate, 'MMMM/yyyy', {
-      locale: ptBR,
-    });
-  }, [selectedDate]);
-
-  const handleDateTimePickerVisibility = useCallback(() => {
-    setShowDateTimePicker(prev => !prev);
-  }, []);
-
-  const handleDateChanged = useCallback((_, date: Date | undefined) => {
-    if (Platform.OS === 'android') {
-      setShowDateTimePicker(false);
-    }
-
-    if (date) {
-      setSelectedDate(date);
-    }
-  }, []);
+  }, [user.uid, filterStatus, alert, oderByDirection, markedDateAsDate]);
 
   const showCreateBillModal = useCallback(() => {
     billModalOffset.value = withTiming(FINAL_VALUE, {
@@ -395,8 +369,6 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
 
         const todayDate = new Date();
 
-        const startOfDayDate = startOfDay(todayDate);
-
         const notificationId = await scheduleNotification({
           content: {
             title: `Heeey, ${docUser.name}`,
@@ -408,7 +380,8 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
             },
           },
           trigger: {
-            date: startOfDayDate,
+            seconds: 60,
+            date: dueDate,
           },
         });
 
@@ -471,6 +444,7 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
 
         hideCreateBillModal();
       } catch (error) {
+        console.log(error);
         const message = verifyCodeError(error);
 
         alert({
@@ -796,12 +770,7 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
         bills,
         loading,
         filterStatus,
-        selectedDate,
-        selectedDateFormatted,
-        showDateTimePicker,
         oderByDirection,
-        handleDateTimePickerVisibility,
-        handleDateChanged,
         showCreateBillModal,
         hideCreateBillModal,
         handleCreateBill,
