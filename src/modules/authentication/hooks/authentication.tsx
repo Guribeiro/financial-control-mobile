@@ -22,13 +22,23 @@ import { setDoc, doc, onSnapshot, Timestamp } from 'firebase/firestore';
 import { useAlert } from '@shared/hooks/alert';
 import { auth, database } from '@shared/services/firebase';
 import { verifyCodeError } from '@shared/utils/errors/firebase';
-import { Alert } from 'react-native';
+import { Alert, Dimensions } from 'react-native';
+
+import ConfirmAction from '@shared/components/ConfirmAction';
+
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 interface AuthenticationContextData {
   loading: boolean;
   user: User;
   docUser: DocUser;
   userName: string;
+  showConfirmActionModal(): void;
   handleSignIn(data: HandleSingInProps): Promise<void>;
   handleSignOut(): Promise<void>;
   handleCreateUserWithEmailAndPassword(
@@ -83,13 +93,45 @@ interface DocUser {
 const AuthenticationProvider = ({
   children,
 }: AuthenticationProviderProps): JSX.Element => {
-  // const [signInLoading, setSigninLoading] = useState(false);
-
+  const INITIAL_VALUE = 1000;
+  const FINAL_VALUE = Dimensions.get('screen').height / 2;
   const { alert } = useAlert();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User>({} as User);
   const [userName, setUserName] = useState('');
   const [docUser, setDocUser] = useState<DocUser>({} as DocUser);
+
+  const modalConfirmationOffset = useSharedValue(INITIAL_VALUE);
+  const modalConfirmationOpacity = useSharedValue(0);
+
+  const modalAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      bottom: modalConfirmationOffset.value,
+      opacity: modalConfirmationOpacity.value,
+    };
+  });
+
+  const showConfirmActionModal = useCallback(() => {
+    modalConfirmationOffset.value = withTiming(FINAL_VALUE, {
+      duration: 300,
+      easing: Easing.ease,
+    });
+    modalConfirmationOpacity.value = withTiming(1, {
+      duration: 300,
+      easing: Easing.ease,
+    });
+  }, [modalConfirmationOffset, modalConfirmationOpacity, FINAL_VALUE]);
+
+  const hideConfirmActionModal = useCallback(() => {
+    modalConfirmationOffset.value = withTiming(INITIAL_VALUE, {
+      duration: 300,
+      easing: Easing.ease,
+    });
+    modalConfirmationOpacity.value = withTiming(0, {
+      duration: 300,
+      easing: Easing.ease,
+    });
+  }, [modalConfirmationOffset, modalConfirmationOpacity, INITIAL_VALUE]);
 
   const handleUserNameFormatted = useCallback((name: string) => {
     const [firstName, secondName] = name.split(' ');
@@ -218,7 +260,8 @@ const AuthenticationProvider = ({
 
         setUser(reauthenticatedUser);
       } catch (error) {
-        console.log(error);
+        const message = verifyCodeError(error);
+        Alert.alert('Algo deu errado', message);
       } finally {
         setLoading(false);
       }
@@ -232,7 +275,8 @@ const AuthenticationProvider = ({
         setLoading(true);
         await updatePassword(user, password);
       } catch (error) {
-        console.log(error);
+        const message = verifyCodeError(error);
+        Alert.alert('Algo deu errado', message);
       } finally {
         setLoading(false);
       }
@@ -247,6 +291,7 @@ const AuthenticationProvider = ({
         user,
         docUser,
         userName,
+        showConfirmActionModal,
         handleSignIn,
         handleSignOut,
         handleCreateUserWithEmailAndPassword,
@@ -255,6 +300,20 @@ const AuthenticationProvider = ({
       }}
     >
       {children}
+      <Animated.View
+        style={[
+          modalAnimatedStyle,
+          { position: 'absolute', alignSelf: 'center' },
+        ]}
+      >
+        <ConfirmAction
+          label="Deseja mesmo sair?"
+          cancelButtonText="Cancelar"
+          confirmButtonText="Sim"
+          onClose={hideConfirmActionModal}
+          onConfirm={handleSignOut}
+        />
+      </Animated.View>
     </AuthenticationContext.Provider>
   );
 };

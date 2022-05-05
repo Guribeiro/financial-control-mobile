@@ -28,7 +28,7 @@ type ProfileScreenProps = NativeStackNavigationProp<
 const Profile = (): JSX.Element => {
   const navigation = useNavigation<ProfileScreenProps>();
 
-  const { docUser, handleSignOut, loading } = useAuthentication();
+  const { docUser, loading, showConfirmActionModal } = useAuthentication();
 
   const { name, email, phone } = docUser;
 
@@ -79,7 +79,7 @@ const Profile = (): JSX.Element => {
         </EditProfileButton>
       </View>
       <Spacer size={64} />
-      <Button loading={loading} onPress={handleSignOut}>
+      <Button loading={loading} onPress={showConfirmActionModal}>
         Sair
       </Button>
       <Spacer size={128} />
