@@ -1,33 +1,39 @@
 import Spacer from '@shared/components/Spacer';
 import { Container, Content, Text, Row, Button, ButtonText } from './styles';
 
-interface ModalConfirmationProps {
+interface ConfirmActionProps {
   onClose: () => void;
-  onPress: () => void;
+  onConfirm: () => void;
+  label: string;
+  cancelButtonText: string;
+  confirmButtonText: string;
 }
 
-const ConfirmDeleteModal = ({
+const ConfirmAction = ({
+  label,
+  cancelButtonText,
+  confirmButtonText,
   onClose,
-  onPress,
-}: ModalConfirmationProps): JSX.Element => {
+  onConfirm,
+}: ConfirmActionProps): JSX.Element => {
   return (
     <Container>
       <Content>
-        <Text>Deseja mesmo excluir essa conta ?</Text>
+        <Text>{label}</Text>
         <Spacer size={32} />
         <Row>
           <Button onPress={onClose} type="cancel">
-            <ButtonText>Cancelar</ButtonText>
+            <ButtonText>{cancelButtonText}</ButtonText>
           </Button>
           <Spacer horizontal size={16} />
           <Button
             onPress={() => {
-              onPress();
+              onConfirm();
               onClose();
             }}
             type="confirm"
           >
-            <ButtonText>Sim</ButtonText>
+            <ButtonText>{confirmButtonText}</ButtonText>
           </Button>
         </Row>
       </Content>
@@ -35,4 +41,4 @@ const ConfirmDeleteModal = ({
   );
 };
 
-export default ConfirmDeleteModal;
+export default ConfirmAction;

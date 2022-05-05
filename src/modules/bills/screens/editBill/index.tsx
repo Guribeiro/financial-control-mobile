@@ -24,7 +24,7 @@ import { useAlert } from '@shared/hooks/alert';
 
 import { Feather } from '@expo/vector-icons';
 
-import ConfirmDeleteModal from '@modules/bills/components/ConfirmDeleteModal';
+import ConfirmAction from '@shared/components/ConfirmAction';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { database, storage } from '@shared/services/firebase';
 import { deleteObject, ref } from 'firebase/storage';
@@ -265,9 +265,12 @@ const EditBill = (): JSX.Element => {
           { position: 'absolute', alignSelf: 'center' },
         ]}
       >
-        <ConfirmDeleteModal
+        <ConfirmAction
+          label="Deseja mesmo excluir essa conta?"
+          cancelButtonText="Cancelar"
+          confirmButtonText="Sim"
           onClose={hideConfirmDeleteBillModal}
-          onPress={() => handleDeleteBill(selectedBill)}
+          onConfirm={() => handleDeleteBill(selectedBill)}
         />
       </Animated.View>
     </Container>

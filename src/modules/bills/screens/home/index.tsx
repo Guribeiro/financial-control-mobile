@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Loading from '@shared/components/Loading';
 import EmptyIndicator from '@shared/components/EmptyIndicator';
-import OrderBy from '@modules/bills/components/OrderBy';
+import Switch, { Option } from '@modules/bills/components/Switch';
 
 import Bill from '@modules/bills/components/Bill';
 
@@ -33,8 +33,16 @@ type HomeScreenParams = NativeStackNavigationProp<RootBillsParamsList, 'Home'>;
 
 const Home = (): JSX.Element => {
   const { customTheme } = useTheme();
-  const { bills, filterStatus, showCreateBillModal, handleSetStatus, loading } =
-    useBill();
+  const {
+    bills,
+    filterStatus,
+    showCreateBillModal,
+    handleSetStatus,
+    loading,
+    oderByDirection,
+    handleSetOrderByDirection,
+  } = useBill();
+
   const { navigate } = useNavigation<HomeScreenParams>();
 
   const statusVariation: StatusVariation = {
@@ -51,6 +59,21 @@ const Home = (): JSX.Element => {
       text: 'Atrasadas',
     },
   };
+
+  const options: Array<Option> = [
+    {
+      key: 'asc',
+      label: 'Crescente',
+      onPress: () => handleSetOrderByDirection('asc'),
+      selected: oderByDirection === 'asc',
+    },
+    {
+      key: 'desc',
+      label: 'Decrescente',
+      onPress: () => handleSetOrderByDirection('desc'),
+      selected: oderByDirection === 'desc',
+    },
+  ];
 
   return (
     <Container>
@@ -131,7 +154,7 @@ const Home = (): JSX.Element => {
           </Row>
         </Overview>
         <Spacer size={24} />
-        <OrderBy />
+        <Switch title="Ordenação" options={options} />
         <Spacer size={24} />
         {loading ? (
           <Loading />
