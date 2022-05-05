@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import AnimatedLottieView from 'lottie-react-native';
 import lottieEmptyAnimation from '../../assets/lottie/empty.json';
+import Spacer from '../Spacer';
 
 const Container = styled.View`
   align-items: center;
@@ -9,7 +10,7 @@ const Container = styled.View`
 `;
 
 export const Text = styled.Text`
-  font-size: ${({ theme }) => theme.screen.rem(1.6, true)}px;
+  font-size: ${({ theme }) => theme.screen.rem(1.2, true)}px;
   font-family: 'Roboto_500Medium';
   color: ${({ theme }) => theme.palett.colors.text_primary_100};
 `;
@@ -21,10 +22,10 @@ const EmptyIndicator = (): JSX.Element => (
       loop
       resizeMode="contain"
       source={lottieEmptyAnimation}
-      speed={0.5}
-      style={{ height: 200 }}
+      style={{ height: 100 }}
     />
-    <Text>Parece que não há nada por aqui</Text>
+    <Spacer size={32} />
+    <Text>Parece que não há nada por aqui...</Text>
   </Container>
 );
 
