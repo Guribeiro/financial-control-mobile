@@ -5,6 +5,8 @@ import {
 
 import { useBill } from '@modules/bills/hooks/bill';
 
+import { useAuthentication } from '@modules/authentication/hooks/authentication';
+
 import DrawerItem from './DrawerItem';
 import Spacer from '../Spacer';
 
@@ -17,16 +19,17 @@ const DrawerContent = ({
   ...rest
 }: DrawerContentComponentProps): JSX.Element => {
   const { showCreateBillModal } = useBill();
+  const { showConfirmActionModal } = useAuthentication();
   return (
     <Container>
-      <DrawerContentScrollView
-        contentContainerStyle={{
-          paddingTop: 0,
-        }}
-        {...rest}
-      >
+      <DrawerContentScrollView {...rest}>
         <Header navigation={navigation} />
         <Spacer size={30} />
+        <DrawerItem
+          label="Início"
+          icon="home"
+          onPress={() => navigation.navigate('BillsRoutes')}
+        />
         <DrawerItem
           label="Adicionar nova conta"
           icon="plus"
@@ -38,9 +41,20 @@ const DrawerContent = ({
           onPress={() => navigation.navigate('ProfileRoutes')}
         />
         <DrawerItem
+          label="Relatórios"
+          icon="paperclip"
+          onPress={() => navigation.navigate('ReportsRoutes')}
+        />
+        <DrawerItem
           label="Configurações"
           icon="settings"
           onPress={() => navigation.navigate('SettingsRoutes')}
+        />
+
+        <DrawerItem
+          label="Sair"
+          icon="power"
+          onPress={showConfirmActionModal}
         />
       </DrawerContentScrollView>
     </Container>

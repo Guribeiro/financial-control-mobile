@@ -52,9 +52,8 @@ import {
 
 import { useDocument } from '@shared/hooks/document';
 import { verifyCodeError } from '@shared/utils/errors/firebase';
+import CreateBillModal from '@modules/bills/screens/createBill';
 import { useCalendar } from './calendar';
-
-import CreateBillModal from '../screens/createBill';
 
 interface BillContextData {
   bills: Bills;
@@ -381,7 +380,6 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
           },
           trigger: {
             seconds: 60,
-            date: dueDate,
           },
         });
 
@@ -444,7 +442,6 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
 
         hideCreateBillModal();
       } catch (error) {
-        console.log(error);
         const message = verifyCodeError(error);
 
         alert({
@@ -515,7 +512,7 @@ const BillProvider = ({ children }: BillProviderProps): JSX.Element => {
         setLoading(false);
       }
     },
-    [user.uid, alert],
+    [user.uid, alert, docUser.name],
   );
 
   const handleUpdateBillValue = useCallback(

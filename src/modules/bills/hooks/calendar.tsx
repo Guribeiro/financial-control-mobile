@@ -13,11 +13,24 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
+import { useTheme } from '@shared/hooks/theme';
 
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import DatePickerCalendar from '@shared/components/DatePickerCalendar';
+
+interface CalendarTheme {
+  backgroundColor: string;
+  calendarBackground: string;
+  textSectionTitleColor: string;
+  dayTextColor: string;
+  arrowColor: string;
+  monthTextColor: string;
+  todayTextColor: string;
+  selectedDayBackgroundColor: string;
+  selectedDayTextColor: string;
+}
 
 interface CalendarContextData {
   handleShowCalendar(): void;
@@ -54,6 +67,20 @@ const CalendarProvider = ({ children }: CalendarProviderProps): JSX.Element => {
       },
     };
   });
+
+  const { customTheme } = useTheme();
+
+  const calendarTheme: CalendarTheme = {
+    backgroundColor: customTheme.palett.colors.primary_60,
+    calendarBackground: 'transparent',
+    textSectionTitleColor: customTheme.palett.colors.blue,
+    dayTextColor: customTheme.palett.colors.text_primary_90,
+    arrowColor: customTheme.palett.colors.blue,
+    monthTextColor: customTheme.palett.colors.blue,
+    todayTextColor: customTheme.palett.colors.blue,
+    selectedDayBackgroundColor: customTheme.palett.colors.blue,
+    selectedDayTextColor: customTheme.palett.colors.primary_100,
+  };
 
   const calendarOffset = useSharedValue(INITIAL_VALUE);
 
@@ -119,6 +146,7 @@ const CalendarProvider = ({ children }: CalendarProviderProps): JSX.Element => {
         ]}
       >
         <DatePickerCalendar
+          theme={calendarTheme}
           hideExtraDays
           onDayPress={handleSetSelectedDate}
           onRequestClose={handleHideCalendar}

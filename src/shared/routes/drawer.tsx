@@ -4,6 +4,7 @@ import BillsRoutes from '@modules/bills/routes';
 import { useTheme } from '@shared/hooks/theme';
 import DrawerContent from '@shared/components/DrawerContent';
 import SettingsRoutes from '@modules/settings/routes';
+import ReportsRoutes from '@modules/reports/routes';
 
 const Drawer = createDrawerNavigator();
 
@@ -13,6 +14,7 @@ const DrawerRoutes = (): JSX.Element => {
     <Drawer.Navigator
       initialRouteName="BillsRoutes"
       screenOptions={{
+        drawerType: 'front',
         headerShown: false,
         sceneContainerStyle: {
           backgroundColor: customTheme.palett.colors.primary_100,
@@ -31,6 +33,7 @@ const DrawerRoutes = (): JSX.Element => {
     >
       <Drawer.Screen name="BillsRoutes" component={BillsRoutes} />
       <Drawer.Screen name="SettingsRoutes" component={SettingsRoutes} />
+      <Drawer.Screen name="ReportsRoutes" component={ReportsRoutes} />
     </Drawer.Navigator>
   );
 };
