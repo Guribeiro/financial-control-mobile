@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -16,6 +17,7 @@ import {
   reauthenticateWithCredential,
   signOut,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 
 import { setDoc, doc, onSnapshot, Timestamp } from 'firebase/firestore';
@@ -46,6 +48,9 @@ interface AuthenticationContextData {
   ): Promise<void>;
   handleReauthenticate(data: HandleReauthenticateProps): Promise<void>;
   handleUpdateAuthPassword(data: HandleUpdateAuthPasswordProps): Promise<void>;
+  handleSendPasswordResetEmail(
+    data: HandleSendPasswordResetEmailProps,
+  ): Promise<void>;
 }
 
 const AuthenticationContext = createContext<AuthenticationContextData>(
@@ -74,6 +79,9 @@ interface HandleReauthenticateProps {
 
 interface HandleUpdateAuthPasswordProps {
   password: string;
+}
+interface HandleSendPasswordResetEmailProps {
+  email: string;
 }
 
 interface CreateUserSchema {
@@ -284,6 +292,30 @@ const AuthenticationProvider = ({
     [user],
   );
 
+  const handleSendPasswordResetEmail = useCallback(
+    async ({ email }: HandleSendPasswordResetEmailProps) => {
+      try {
+        setLoading(true);
+
+        await sendPasswordResetEmail(auth, email);
+
+        alert({
+          type: 'info',
+          message: 'Enviamos uma caixa postal para o email fornecido',
+        });
+      } catch (error) {
+        const message = verifyCodeError(error);
+        alert({
+          type: 'error',
+          message,
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [alert],
+  );
+
   return (
     <AuthenticationContext.Provider
       value={{
@@ -297,6 +329,7 @@ const AuthenticationProvider = ({
         handleCreateUserWithEmailAndPassword,
         handleReauthenticate,
         handleUpdateAuthPassword,
+        handleSendPasswordResetEmail,
       }}
     >
       {children}

@@ -5,6 +5,7 @@ import Welcome from '../screens/welcome';
 import Signin from '../screens/signin';
 import Signup from '../screens/signup';
 import DefinePassword from '../screens/definePassword';
+import ForgotPassword from '../screens/forgotPassword';
 
 export interface DefinePasswordParams {
   name: string;
@@ -17,6 +18,7 @@ export type RootAuthenticationParamsList = {
   Signin: undefined;
   Signup: undefined;
   DefinePassword: DefinePasswordParams;
+  ForgotPassword: undefined;
 };
 
 const AuthenticationStack =
@@ -48,7 +50,7 @@ const AuthenticationRoutes = (): JSX.Element => {
           header: () => (
             <Header
               navigation={navigation}
-              label="Sign In"
+              label="Voltar"
               route={route}
               options={{}}
             />
@@ -64,7 +66,7 @@ const AuthenticationRoutes = (): JSX.Element => {
           header: () => (
             <Header
               navigation={navigation}
-              label="Cadastro"
+              label="Voltar"
               route={route}
               options={{}}
             />
@@ -80,7 +82,23 @@ const AuthenticationRoutes = (): JSX.Element => {
           header: () => (
             <Header
               navigation={navigation}
-              label="Defina sua senha"
+              label="Voltar"
+              route={route}
+              options={{}}
+            />
+          ),
+        })}
+      />
+
+      <AuthenticationStack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
+        options={({ navigation, route }) => ({
+          headerShown: true,
+          header: () => (
+            <Header
+              navigation={navigation}
+              label="Voltar"
               route={route}
               options={{}}
             />

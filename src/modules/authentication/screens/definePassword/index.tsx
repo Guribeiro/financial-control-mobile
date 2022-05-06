@@ -22,10 +22,12 @@ export const WelcomeImage = styled.Image`
   width: 100%;
 `;
 
-// type SigninScreenProps = NativeStackNavigationProp<
-//   RootAuthenticationParamsList,
-//   'DefinePassword'
-// >;
+export const LargeText = styled.Text`
+  font-family: 'Roboto_500Medium';
+  font-size: ${({ theme }) => theme.screen.rem(2, true)}px;
+  font-family: 'Roboto_400Regular';
+  color: ${({ theme }) => theme.palett.colors.text_primary_100};
+`;
 
 interface FormProps {
   password: string;
@@ -72,6 +74,8 @@ const DefinePassword = (): JSX.Element => {
     <Container>
       <Spacer size={32} />
       <Logo />
+      <Spacer size={32} />
+      <LargeText>Defina sua senha</LargeText>
       <Spacer size={32} />
       <Controller
         name="password"

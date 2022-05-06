@@ -22,6 +22,13 @@ export const WelcomeImage = styled.Image`
   width: 100%;
 `;
 
+export const LargeText = styled.Text`
+  font-family: 'Roboto_500Medium';
+  font-size: ${({ theme }) => theme.screen.rem(2, true)}px;
+  font-family: 'Roboto_400Regular';
+  color: ${({ theme }) => theme.palett.colors.text_primary_100};
+`;
+
 type SignupScreenProps = NativeStackNavigationProp<
   RootAuthenticationParamsList,
   'Signup'
@@ -69,6 +76,8 @@ const Signup = (): JSX.Element => {
       <Spacer size={32} />
       <Logo />
       <Spacer size={32} />
+      <LargeText>Fazer meu cadastro</LargeText>
+      <Spacer size={32} />
       <View>
         <Controller
           name="name"
@@ -92,6 +101,7 @@ const Signup = (): JSX.Element => {
               label="email"
               value={value}
               onChangeText={onChange}
+              keyboardType="email-address"
               error={error}
             />
           )}
