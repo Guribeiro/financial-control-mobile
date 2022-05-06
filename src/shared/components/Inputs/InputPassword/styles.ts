@@ -36,7 +36,6 @@ export const TextInputRow = styled.View<TextInputRowProps>`
 export const TogglePasswordVisibilityButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
-  background: ${({ theme }) => theme.palett.colors.primary_60};
   padding: ${({ theme }) => theme.screen.rem(1)}px;
   height: ${({ theme }) => theme.screen.rem(3.375)}px;
   border-top-right-radius: ${({ theme }) => theme.screen.rem(0.5)}px;
