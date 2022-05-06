@@ -52,7 +52,7 @@ export const Select = ({
       paddingHorizontal: customTheme.screen.rem(1),
       height: customTheme.screen.rem(3.375),
       borderColor: customTheme.palett.colors.secondary_100,
-      backgroundColor: customTheme.palett.colors.primary_100,
+      backgroundColor: customTheme.palett.colors.secondary_100,
     },
     inputIOS: {
       color: customTheme.palett.colors.text_primary_60,
